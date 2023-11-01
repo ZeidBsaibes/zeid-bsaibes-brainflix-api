@@ -4,14 +4,17 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT;
 const fs = require("fs");
+const cors = require("cors");
+
+app.use(express.json());
+app.use(cors());
+app.use("/public", express.static("public"));
 
 console.log(PORT);
 
 app.listen(`${PORT}`, () => {
   console.log(`from index.js, listening on port ${PORT}`);
 });
-
-app.use(express.json());
 
 app.get("/videos", (req, res) => {
   try {
@@ -26,7 +29,7 @@ app.get("/videos", (req, res) => {
         };
       }
     );
-
+    console.log(`/videos get requested`);
     res.status(200).send(videosArraySelectedKeys);
   } catch (error) {
     res.status(500).send(`something went wrong, have a look at this ${error}`);
@@ -38,6 +41,7 @@ app.get("/videos/:id", (req, res) => {
   try {
     const videosArray = JSON.parse(fs.readFileSync("./data/videos.json"));
     const requestedVideoId = req.params.id;
+    console.log(`/ videos/id get request`);
     const foundVideo = videosArray.find((video) => {
       return video.id === requestedVideoId;
     });
@@ -121,10 +125,12 @@ app.post("/videos", (req, res) => {
     videosArray.push(newVideo);
     console.log(videosArray);
 
-    fs.writeFileSync("./data/videos.json", JSON.stringify(videosArray));
+    // fs.writeFileSync("./data/videos.json", JSON.stringify(videosArray));
 
     res.status(201).send(newVideo);
   } catch (error) {
     console.error(error);
   }
 });
+
+// serve static images
