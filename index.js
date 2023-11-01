@@ -118,14 +118,13 @@ app.post("/videos", (req, res) => {
       timestamp: Date.now(),
       comments: [],
     };
-    // console.log(`this is the new video`, newVideo);
+    console.log(`this is the new video`, newVideo);
 
     const videosArray = JSON.parse(fs.readFileSync("./data/videos.json"));
 
     videosArray.push(newVideo);
-    console.log(videosArray);
 
-    // fs.writeFileSync("./data/videos.json", JSON.stringify(videosArray));
+    fs.writeFileSync("./data/videos.json", JSON.stringify(videosArray));
 
     res.status(201).send(newVideo);
   } catch (error) {
