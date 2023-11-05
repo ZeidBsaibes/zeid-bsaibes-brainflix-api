@@ -7,6 +7,8 @@ const fs = require("fs");
 const cors = require("cors");
 
 app.use(express.json());
+
+// need to add all  images and server from the backend
 app.use(cors());
 app.use("/public", express.static("public"));
 
@@ -20,12 +22,12 @@ app.get("/videos", (req, res) => {
   try {
     const videosArray = JSON.parse(fs.readFileSync("./data/videos.json"));
     const videosArraySelectedKeys = videosArray.map(
-      ({ id, title, channel, image }) => {
+      ({ id, title, channel, image }, index) => {
         return {
           id,
           title,
           channel,
-          image,
+          image: `http://localhost:${PORT}/public/images/image${index}.jpeg`,
         };
       }
     );
