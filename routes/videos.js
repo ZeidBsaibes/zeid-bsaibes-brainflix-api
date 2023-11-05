@@ -6,6 +6,8 @@ const PORT = process.env.PORT;
 const fs = require("fs");
 const cors = require("cors");
 const router = express.Router();
+const multer = require("multer");
+const upload = multer({ dest: "./public/images" });
 
 router.use(express.json());
 router.use(cors());
@@ -20,10 +22,7 @@ router.get("/", (req, res) => {
           id,
           title,
           channel,
-          image:
-            index < 8
-              ? `http://localhost:${PORT}/public/images/image${index}.jpeg`
-              : `http://localhost:${PORT}/public/images/mountains.jpg`,
+          image,
         };
       }
     );
@@ -35,7 +34,7 @@ router.get("/", (req, res) => {
   }
 });
 
-router.post("/", (req, res) => {
+router.post("/", upload.single("file"), (req, res) => {
   try {
     const {
       title,
@@ -47,6 +46,8 @@ router.post("/", (req, res) => {
       duration,
       video,
     } = req.body;
+
+    console.log(`uploaded file:`, req.file);
 
     const errors = [];
 
@@ -82,7 +83,7 @@ router.post("/", (req, res) => {
       id: crypto.randomUUID(),
       title: title,
       channel: channel,
-      image: image,
+      image: `http://localhost:${PORT}/public/images/${req.file.filename}`,
       description: description,
       views: views,
       likes: likes,
