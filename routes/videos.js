@@ -155,6 +155,7 @@ router.post("/:id/comments", (req, res) => {
         ...video,
         comments: [...video.comments, newComment],
       };
+    return video;
   });
   fs.writeFileSync("./data/videos.json", JSON.stringify(updatedVideos));
   res.status(201).send(newComment);
