@@ -21,8 +21,6 @@ app.listen(`${PORT}`, () => {
   console.log(`from index.js, listening on port ${PORT}`);
 });
 
-// app.get("/videos/:id", (req, res) => {
-//   try {
 //     const videosArray = JSON.parse(fs.readFileSync("./data/videos.json"));
 //     const requestedVideoId = req.params.id;
 //     console.log(`/ videos/id get request`);

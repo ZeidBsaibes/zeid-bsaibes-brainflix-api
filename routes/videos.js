@@ -131,4 +131,35 @@ router.get("/:id", (req, res) => {
   }
 });
 
+router.post("/:id/comments", (req, res) => {
+  console.log(req.body);
+  const { name, comment } = req.body;
+  const { id } = req.params;
+
+  if ((!name, !comment, !id)) {
+    res.status(404).send("comment post object cannot be empty");
+  }
+
+  const videosArray = JSON.parse(fs.readFileSync("./data/videos.json"));
+  const newComment = {
+    id: crypto.randomUUID(),
+    name: name,
+    comment: "thiis is  acomment",
+    likes: 0,
+    timestamp: Date.now(),
+  };
+  console.log("newcomment is", newComment);
+  const updatedVideos = videosArray.map((video) => {
+    if (video.id === id)
+      return {
+        ...video,
+        comments: [...video.comments, newComment],
+      };
+  });
+  fs.writeFileSync("./data/videos.json", JSON.stringify(updatedVideos));
+  res.status(201).send(newComment);
+  //   console.log(id, name, comment);
+  //   console.log(updatedVideos);
+});
+
 module.exports = router;
